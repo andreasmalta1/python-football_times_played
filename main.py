@@ -168,3 +168,7 @@ plt.savefig(
     facecolor='#EFE9E6',
     bbox_inches='tight'
 )
+
+#TODO: Make code in functions
+#TODO: Get data from csv
+#TODO: Get team as input
