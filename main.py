@@ -44,230 +44,14 @@ def minutes_battery(minutes, ax):
     return ax
 
 df = pd.read_csv('real_madrid_playing_time.csv', header=[1])
-# print(tabulate(df.head(), tablefmt='pipe', headers='keys'))
-df.head()
 
-df_example_1 = df[df['Min'] >= 1000].reset_index(drop=True)
-df_example_1 = df_example_1[['Player', 'Pos', 'MP', 'Starts', 'Subs', 'unSub']]
-print(tabulate(df_example_1.head(), tablefmt='pipe', headers='keys'))
-
-df_example_1['InSquad'] = df_example_1['MP'] + df_example_1['unSub']
-df_example_1 = df_example_1.sort_values(by='Starts').reset_index(drop=True)
-df_example_1 = df_example_1[~df_example_1['Pos'].isna()]
-df_example_1.head()
-
-fig = plt.figure(figsize=(7,10), dpi=300)
-ax = plt.subplot()
-
-ncols = 5
-nrows = df_example_1.shape[0]
-
-ax.set_xlim(0, ncols + 1)
-ax.set_ylim(0, nrows)
-
-positions = [0.25, 2.5, 3.5, 4.5, 5.5]
-columns = ['Player', 'Pos', 'MP', 'Starts', 'InSquad']
-
-# Add table's main text
-for i in range(nrows):
-    for j, column in enumerate(columns):
-        if j == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        ax.annotate(
-            xy=(positions[j], i),
-            text=df_example_1[column].iloc[i],
-            ha=ha,
-            va='center'
-        )
-
-# Add column names
-column_names = ['Player', 'Position', 'Matches\nPlayed', 'Starts', 'In Squad']
-for index, c in enumerate(column_names):
-        if index == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        ax.annotate(
-            xy=(positions[index], nrows),
-            text=column_names[index],
-            ha=ha,
-            va='bottom',
-            weight='bold'
-        )
-
-ax.set_axis_off()
-plt.savefig(
-    'figures/first_useful_table.png',
-    dpi=300,
-    transparent=True,
-    bbox_inches='tight'
-)
-
-df_example_2 = df[df['Min'] >= 1000].reset_index(drop=True)
-df_example_2 = df_example_2[['Player', 'Pos', 'Min', 'MP', 'Starts', 'Subs', 'unSub']]
-print(tabulate(df_example_2.head(), tablefmt='pipe', headers='keys'))
-
-df_example_2['InSquad'] = df_example_2['MP'] + df_example_2['unSub']
-df_example_2 = df_example_2.sort_values(by='Min').reset_index(drop=True)
-df_example_2 = df_example_2[~df_example_2['Pos'].isna()]
-
-
-df_example_2['Starts_InSquad'] = [f'{x}/{y}' for x,y in zip(df_example_2['Starts'], df_example_2['InSquad'])]
-df_example_2.head()
-
-fig = plt.figure(figsize=(7,10), dpi=300)
-ax = plt.subplot()
-
-ncols = 5
-nrows = df_example_2.shape[0]
-
-ax.set_xlim(0, ncols + 1)
-ax.set_ylim(0, nrows + 1)
-
-positions = [0.25, 2.5, 3.5, 4.5, 5.5]
-columns = ['Player', 'Pos', 'Min', 'MP', 'Starts_InSquad']
-
-# Add table's main text
-for i in range(nrows):
-    for j, column in enumerate(columns):
-        if j == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        if column == 'Min':
-            text_label = f'{df_example_2[column].iloc[i]:,.0f}'
-            weight = 'bold'
-        else:
-            text_label = f'{df_example_2[column].iloc[i]}'
-            weight = 'normal'
-        ax.annotate(
-            xy=(positions[j], i + .5),
-            text=text_label,
-            ha=ha,
-            va='center',
-            weight=weight
-        )
-
-# Add column names
-column_names = ['Player', 'Position', 'Minutes', 'Matches\nPlayed', 'Starts /\nIn Squad']
-for index, c in enumerate(column_names):
-        if index == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        ax.annotate(
-            xy=(positions[index], nrows + .25),
-            text=column_names[index],
-            ha=ha,
-            va='bottom',
-            weight='bold'
-        )
-
-# Add dividing lines
-ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
-ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
-for x in range(1, nrows):
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [x, x], lw=1.15, color='gray', ls=':', zorder=3 , marker='')
-
-ax.set_axis_off()
-plt.savefig(
-    'figures/pretty_example.png',
-    dpi=300,
-    transparent=True,
-    bbox_inches='tight'
-)
-
-df_final = df[df['Min'] >= 1000].reset_index(drop=True)
+df_final = df[df['Min'] >= 400].reset_index(drop=True)
 df_final = df_final[['Player', 'Nation', 'Pos', 'Min', 'MP', 'Starts', 'Subs', 'unSub']]
 df_final['InSquad'] = df_final['MP'] + df_final['unSub']
 df_final = df_final.sort_values(by='Min').reset_index(drop=True)
 df_final = df_final[~df_final['Pos'].isna()]
 df_final['Nation'] = [x.split(' ')[1].lower() for x in df_final['Nation']]
 df_final['Starts_InSquad'] = [f'{x}/{y}' for x,y in zip(df_final['Starts'], df_final['InSquad'])]
-print(tabulate(df_final.head(), tablefmt='pipe', headers='keys'))
-
-fig = plt.figure(figsize=(8,10), dpi=300)
-ax = plt.subplot()
-
-ncols = 6
-nrows = df_final.shape[0]
-
-ax.set_xlim(0, ncols + 1)
-ax.set_ylim(0, nrows + 1)
-
-positions = [0.25, 3.5, 4.5, 5.5, 6.5]
-columns = ['Player', 'Pos', 'Min', 'MP', 'Starts_InSquad']
-
-# -- Add table's main text
-for i in range(nrows):
-    for j, column in enumerate(columns):
-        if j == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        if column == 'Min':
-            text_label = f'{df_final[column].iloc[i]:,.0f}'
-            weight = 'bold'
-        else:
-            text_label = f'{df_final[column].iloc[i]}'
-            weight = 'normal'
-        ax.annotate(
-            xy=(positions[j], i + .5),
-            text=text_label,
-            ha=ha,
-            va='center',
-            weight=weight
-        )
-
-# -- Transformation functions
-
-# -- Transformation functions
-DC_to_FC = ax.transData.transform
-FC_to_NFC = fig.transFigure.inverted().transform
-# -- Take data coordinates and transform them to normalized figure coordinates
-DC_to_NFC = lambda x: FC_to_NFC(DC_to_FC(x))
-# -- Add nation axes
-ax_point_1 = DC_to_NFC([2.25, 0.25])
-ax_point_2 = DC_to_NFC([2.75, 0.75])
-ax_width = abs(ax_point_1[0] - ax_point_2[0])
-ax_height = abs(ax_point_1[1] - ax_point_2[1])
-for x in range(0, nrows):
-    ax_coords = DC_to_NFC([2.25, x + .25])
-    flag_ax = fig.add_axes(
-        [ax_coords[0], ax_coords[1], ax_width, ax_height]
-    )
-    ax_logo(df_final['Nation'].iloc[x], flag_ax)
-
-# -- Add column names
-column_names = ['Player', 'Position', 'Minutes', 'Matches\nPlayed', 'Starts /\nIn Squad']
-for index, c in enumerate(column_names):
-        if index == 0:
-            ha = 'left'
-        else:
-            ha = 'center'
-        ax.annotate(
-            xy=(positions[index], nrows + .25),
-            text=column_names[index],
-            ha=ha,
-            va='bottom',
-            weight='bold'
-        )
-
-# Add dividing lines
-ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
-ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
-for x in range(1, nrows):
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [x, x], lw=1.15, color='gray', ls=':', zorder=3 , marker='')
-
-ax.set_axis_off()
-plt.savefig(
-    'figures/flag_example.png',
-    dpi=300,
-    transparent=True,
-    bbox_inches='tight'
-)
 
 fig = plt.figure(figsize=(8,10), dpi=300, facecolor='#EFE9E6')
 ax = plt.subplot()
@@ -281,7 +65,6 @@ ax.set_ylim(0, nrows + 1)
 positions = [0.25, 3.5, 4.5, 5.5, 6.5]
 columns = ['Player', 'Pos', 'Min', 'MP', 'Starts_InSquad']
 
-# -- Add table's main text
 for i in range(nrows):
     for j, column in enumerate(columns):
         if j == 0:
@@ -301,16 +84,16 @@ for i in range(nrows):
             weight=weight
         )
 
-# -- Transformation functions
 DC_to_FC = ax.transData.transform
 FC_to_NFC = fig.transFigure.inverted().transform
-# -- Take data coordinates and transform them to normalized figure coordinates
+
 DC_to_NFC = lambda x: FC_to_NFC(DC_to_FC(x))
-# -- Add nation axes
+
 ax_point_1 = DC_to_NFC([2.25, 0.25])
 ax_point_2 = DC_to_NFC([2.75, 0.75])
 ax_width = abs(ax_point_1[0] - ax_point_2[0])
 ax_height = abs(ax_point_1[1] - ax_point_2[1])
+
 for x in range(0, nrows):
     ax_coords = DC_to_NFC([2.25, x + .25])
     flag_ax = fig.add_axes(
@@ -329,7 +112,6 @@ for x in range(0, nrows):
     )
     minutes_battery(df_final['Min'].iloc[x], bar_ax)
 
-# -- Add column names
 column_names = ['Player', 'Position', '% of Min.\nPlayed', 'Matches\nPlayed', 'Starts /\nIn Squad']
 for index, c in enumerate(column_names):
         if index == 0:
@@ -344,7 +126,6 @@ for index, c in enumerate(column_names):
             weight='bold'
         )
 
-# Add dividing lines
 ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
 ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
 for x in range(1, nrows):
@@ -359,9 +140,7 @@ ax.fill_between(
     ec='None'
 )
 
-
 ax.set_axis_off()
-# -- Final details
 logo_ax = fig.add_axes(
     [0.825, 0.89, .05, .05]
 )
