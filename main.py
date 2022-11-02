@@ -43,7 +43,20 @@ def minutes_battery(minutes, ax):
     ax.set_axis_off()
     return ax
 
-df = pd.read_csv('real_madrid_playing_time.csv', header=[1])
+url = 'https://fbref.com/en/squads/19538871/2022-2023/all_comps/Manchester-United-Stats-All-Competitions'
+html = pd.read_html(url, header=1)
+# print(html)
+df = html[0]
+# print(df)
+# print('------------------------------------------------------')
+# df = html[1]
+# print(df)
+# print('------------------------------------------------------')
+# df = html[2]
+# print(df)
+# print('------------------------------------------------------')
+df = html[28]
+df = pd.read_csv('man_utd_playing_times.csv', header=[0])
 
 df_final = df[df['Min'] >= 400].reset_index(drop=True)
 df_final = df_final[['Player', 'Nation', 'Pos', 'Min', 'MP', 'Starts', 'Subs', 'unSub']]
@@ -52,6 +65,7 @@ df_final = df_final.sort_values(by='Min').reset_index(drop=True)
 df_final = df_final[~df_final['Pos'].isna()]
 df_final['Nation'] = [x.split(' ')[1].lower() for x in df_final['Nation']]
 df_final['Starts_InSquad'] = [f'{x}/{y}' for x,y in zip(df_final['Starts'], df_final['InSquad'])]
+print(df)
 
 fig = plt.figure(figsize=(8,10), dpi=300, facecolor='#EFE9E6')
 ax = plt.subplot()
@@ -170,5 +184,7 @@ plt.savefig(
 )
 
 #TODO: Make code in functions
-#TODO: Get data from csv
+#TODO: Get data from url - not always table 25
 #TODO: Get team as input
+#TODO: Make for not a full season
+#TODO: Redo code
