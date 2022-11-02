@@ -3,7 +3,7 @@ from tabulate import tabulate
 import matplotlib.pyplot as plt
 
 from PIL import Image
-import urllib
+import urllib.request
 import os
 
 def ax_logo(team_id, ax):
@@ -386,6 +386,6 @@ plt.savefig(
     'figures/final_table_bkg.png',
     dpi=300,
     transparent=False,
-    faceolor='#EFE9E6',
+    facecolor='#EFE9E6',
     bbox_inches='tight'
 )
