@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import urllib.request
 
+
 def ax_logo(team_id, ax):
     fotmob_url = 'https://images.fotmob.com/image_resources/logo/teamlogo/'
     club_icon = Image.open(urllib.request.urlopen(f'{fotmob_url}{team_id}.png'))
@@ -156,6 +157,13 @@ def plot_data(df_final):
         va='bottom',
         weight='bold',
         size=12)
+
+    ax.annotate('Stats from fbref.com', (0,0), (0,-5), fontsize=8, 
+              xycoords='axes fraction', textcoords='offset points', va='top')
+    ax.annotate('Data Viz by Andreas Calleja @andreascalleja', (0,0), (0,-15), fontsize=8, 
+            xycoords='axes fraction', textcoords='offset points', va='top')
+    ax.annotate('Data Viz Inspiration by @sonofacorner', (0,0), (0,-25), fontsize=8, 
+            xycoords='axes fraction', textcoords='offset points', va='top')
 
     save_figure('figures/final_table.png', 300, True, '#EFE9E6', 'tight')
     save_figure('figures/final_table_bkg.png', 300, False, '#EFE9E6', 'tight')
