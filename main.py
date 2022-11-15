@@ -46,7 +46,7 @@ def get_data():
 
 def format_data(df):
     df_final = df[df['Min'] >= 400].reset_index(drop=True)
-    df_final = df_final[['Player', 'Nation', 'Pos', 'Min', 'MP', 'Starts', 'Subs', 'unSub']]
+    df_final = df_final[['Player', 'Nation', 'Pos', 'Age', 'Min', 'MP', 'Starts', 'Subs', 'unSub']]
     df_final['InSquad'] = df_final['MP'] + df_final['unSub']
     df_final = df_final.sort_values(by='Min').reset_index(drop=True)
     df_final = df_final[~df_final['Pos'].isna()]
@@ -152,7 +152,7 @@ def plot_data(df_final):
     
     fig.text(
         x=0.15, y=.91,
-        s='Man UTD 2022/2022 Squad Playing Time All Comps',
+        s='Man UTD 2021/2022 Squad Playing Time All Comps',
         ha='left',
         va='bottom',
         weight='bold',
@@ -177,4 +177,4 @@ def main():
 
 main()
 
-# Footnotes
+# Add age
