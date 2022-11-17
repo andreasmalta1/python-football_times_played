@@ -59,14 +59,14 @@ def plot_data(df_final):
     fig = plt.figure(figsize=(8,10), dpi=300, facecolor='#EFE9E6')
     ax = plt.subplot()
 
-    ncols = 6
+    ncols = 7
     nrows = df_final.shape[0]
 
     ax.set_xlim(0, ncols + 1)
     ax.set_ylim(0, nrows + 1)
 
-    positions = [0.25, 3.5, 4.5, 5.5, 6.5]
-    columns = ['Player', 'Pos', 'Min', 'MP', 'Starts_InSquad']
+    positions = [0.25, 3.5, 4.5, 5.5, 6.5, 7.5]
+    columns = ['Player', 'Pos', 'Age', 'Min', 'MP', 'Starts_InSquad']
 
     for i in range(nrows):
         for j, column in enumerate(columns):
@@ -82,6 +82,9 @@ def plot_data(df_final):
             weight = 'normal'
 
             if column == 'Pos':
+                text_label = text_label[:2]
+
+            if column == 'Age':
                 text_label = text_label[:2]
             
             ax.annotate(
@@ -112,11 +115,11 @@ def plot_data(df_final):
     ax_height = abs(ax_point_1[1] - ax_point_2[1])
     
     for x in range(0, nrows):
-        ax_coords = DC_to_NFC([4, x + .025])
+        ax_coords = DC_to_NFC([5, x + .025])
         bar_ax = fig.add_axes([ax_coords[0], ax_coords[1], ax_width, ax_height])
         minutes_battery(df_final['Min'].iloc[x], bar_ax)
 
-    column_names = ['Player', 'Position', '% of Min.\nPlayed', 'Matches\nPlayed', 'Starts /\nIn Squad']
+    column_names = ['Player', 'Position', 'Age', '% of Min.\nPlayed', 'Matches\nPlayed', 'Starts /\nIn Squad']
     
     for index, c in enumerate(column_names):
             if index == 0:
@@ -152,7 +155,7 @@ def plot_data(df_final):
     
     fig.text(
         x=0.15, y=.91,
-        s='Man UTD 2021/2022 Squad Playing Time All Comps',
+        s='Man UTD 2022/2023 Squad Playing Time All Comps',
         ha='left',
         va='bottom',
         weight='bold',
