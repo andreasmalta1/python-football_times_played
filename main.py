@@ -155,7 +155,7 @@ def plot_data(df_final):
     
     fig.text(
         x=0.15, y=.91,
-        s='Man UTD 2022/2023 Squad Playing Time All Competions',
+        s='Man UTD 2022/2023 Squad Playing Time All Competitons',
         ha='left',
         va='bottom',
         weight='bold',
